@@ -1,0 +1,3 @@
+config:
+  prometheus_domain: prometheus.example.com
+  grafana: grafana.example.com

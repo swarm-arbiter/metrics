@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+  node_stat:
+    hostname: "\{{ .Node.Hostname \}}-node-stat"
+    image: prom/node-exporter:v0.17.0
+    networks:
+      - revprox_ingress
+      - internal
+    # port 9100
+    volumes:
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /proc:/host/proc:ro
+    deploy:
+      endpoint_mode: dnsrr
+      mode: global
+
+  prometheus:
+    image: prom/prometheus:v2.6.0
+    networks:
+      - revprox_ingress
+      - internal
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    volumes:
+      - {{= stack.data_dir }}/resources/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - {{= stack.data_dir }}/persistent/prometheus:/prometheus:rw
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.docker.network=revprox_ingress"
+        - "traefik.port=9090"
+        - "traefik.backend={{= config.prometheus_domain }}"
+        - "traefik.frontend.rule=Host:{{= config.prometheus_domain }}"
+
+#  grafana:
+#    image: grafana/grafana
+#    networks:
+#      - revprox_ingress
+#    volumes:
+#      - ./data/grafana:/var/lib/grafana:rw
+#    deploy:
+#      mode: replicated
+#      replicas: 1
+#      labels:
+#        - "traefik.docker.network=revprox_ingress"
+#        - "traefik.port=3000"
+#        - "traefik.backend={{= config.grafana_domain }}"
+#        - "traefik.frontend.rule=Host:{{= config.grafana_domain }}"
+
+networks:
+  revprox_ingress:
+    external: true
+
+  # Internal network overwhich metrics services can communicate with one another
+  internal:
+    driver: overlay

@@ -1,0 +1,4 @@
+- persistent/:
+    children:
+      - prometheus/:
+          mode: '0777'
