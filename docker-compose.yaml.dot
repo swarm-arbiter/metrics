@@ -23,10 +23,8 @@ services:
   cadvisor:
     image: google/cadvisor:v0.32.0
     hostname: "\{{ .Node.Hostname \}}-cadvisor"
-    command:
-      - '--port=9100'
-    expose:
-      - 9100
+    networks:
+      - internal
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -35,7 +33,7 @@ services:
     deploy:
       mode: global
     environment:
-      - "SERVICE_TAGS=host-\{{ .Node.Hostname \}},instance-cadvisor-\{{ .Node.Hostname \}}"
+      - "SERVICE_TAGS=host-\{{ .Node.Hostname \}},instance-cadvisor-\{{ .Node.Hostname \}},prometheus"
 
   # Promethus to collect metric data
   prometheus:
