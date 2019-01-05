@@ -1,21 +1,43 @@
 version: '3.3'
 
 services:
+  # Export infomation about host nodes
   node_stat:
     hostname: "\{{ .Node.Hostname \}}-node-stat"
     image: prom/node-exporter:v0.17.0
     networks:
       - revprox_ingress
       - internal
-    # port 9100
+    environment:
+      - "SERVICE_TAGS=node-\{{ .Node.Hostname \}}"
     volumes:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /proc:/host/proc:ro
     deploy:
-      endpoint_mode: dnsrr
       mode: global
+    environment:
+      - "SERVICE_TAGS=host-\{{ .Node.Hostname \}},instance-\{{ .Node.Hostname \}}"
 
+  # Export infomation about running containers
+  cadvisor:
+    image: google/cadvisor:v0.32.0
+    hostname: "\{{ .Node.Hostname \}}-cadvisor"
+    command:
+      - '--port=9100'
+    expose:
+      - 9100
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    deploy:
+      mode: global
+    environment:
+      - "SERVICE_TAGS=host-\{{ .Node.Hostname \}},instance-cadvisor-\{{ .Node.Hostname \}}"
+
+  # Promethus to collect metric data
   prometheus:
     image: prom/prometheus:v2.6.0
     networks:
@@ -36,20 +58,23 @@ services:
         - "traefik.backend={{= config.prometheus_domain }}"
         - "traefik.frontend.rule=Host:{{= config.prometheus_domain }}"
 
-#  grafana:
-#    image: grafana/grafana
-#    networks:
-#      - revprox_ingress
-#    volumes:
-#      - ./data/grafana:/var/lib/grafana:rw
-#    deploy:
-#      mode: replicated
-#      replicas: 1
-#      labels:
-#        - "traefik.docker.network=revprox_ingress"
-#        - "traefik.port=3000"
-#        - "traefik.backend={{= config.grafana_domain }}"
-#        - "traefik.frontend.rule=Host:{{= config.grafana_domain }}"
+
+  # Display pretty dashboards of prometheus data
+  grafana:
+    image: grafana/grafana
+    networks:
+      - revprox_ingress
+      - internal
+    volumes:
+      - {{= stack.data_dir}}/persistent/grafana:/var/lib/grafana:rw
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels:
+        - "traefik.docker.network=revprox_ingress"
+        - "traefik.port=3000"
+        - "traefik.backend={{= config.grafana_domain }}"
+        - "traefik.frontend.rule=Host:{{= config.grafana_domain }}"
 
 networks:
   revprox_ingress:

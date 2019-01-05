@@ -2,3 +2,5 @@
     children:
       - prometheus/:
           mode: '0777'
+      - grafana/:
+          mode: '0777'
