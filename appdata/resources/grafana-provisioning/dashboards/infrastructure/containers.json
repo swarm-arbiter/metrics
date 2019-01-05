@@ -15,8 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1546693561918,
+  "iteration": 1546701431334,
   "links": [],
   "panels": [
     {
@@ -24,6 +23,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "prometheus",
       "fill": 1,
       "gridPos": {
         "h": 4,
@@ -69,7 +69,7 @@
       "title": "Containers Running",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -113,6 +113,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": "prometheus",
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -188,8 +189,8 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
-      "fill": 9,
+      "datasource": "prometheus",
+      "fill": 10,
       "gridPos": {
         "h": 8,
         "w": 19,
@@ -208,7 +209,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 0,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -238,7 +239,7 @@
       "title": "Container Memory Usage",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -255,7 +256,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -281,6 +282,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": "prometheus",
       "description": "The percentage of total cluster memory being used by containers",
       "format": "percentunit",
       "gauge": {
@@ -361,6 +363,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": "prometheus",
       "description": "Total memory usage of the cluster",
       "format": "percentunit",
       "gauge": {
@@ -437,6 +440,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "prometheus",
       "fill": 1,
       "gridPos": {
         "h": 8,
@@ -486,7 +490,7 @@
       "title": "Container Single Core Utilisation",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -529,6 +533,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": "prometheus",
       "format": "percentunit",
       "gauge": {
         "maxValue": 100,
@@ -608,6 +613,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "datasource": "prometheus",
       "decimals": null,
       "format": "percentunit",
       "gauge": {
@@ -690,11 +696,13 @@
       {
         "allValue": "",
         "current": {
-          "selected": true,
+          "tags": [],
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
-        "datasource": "Prometheus",
+        "datasource": "prometheus",
         "definition": "label_values(container_label_com_docker_swarm_service_name)",
         "hide": 0,
         "includeAll": true,
@@ -706,70 +714,15 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "metrics_cadvisor",
-            "value": "metrics_cadvisor"
-          },
-          {
-            "selected": false,
-            "text": "metrics_grafana",
-            "value": "metrics_grafana"
-          },
-          {
-            "selected": false,
-            "text": "metrics_node_stat",
-            "value": "metrics_node_stat"
-          },
-          {
-            "selected": false,
-            "text": "metrics_prometheus",
-            "value": "metrics_prometheus"
-          },
-          {
-            "selected": false,
-            "text": "portainer_agent",
-            "value": "portainer_agent"
-          },
-          {
-            "selected": false,
-            "text": "portainer_frontend",
-            "value": "portainer_frontend"
-          },
-          {
-            "selected": false,
-            "text": "revprox_consul",
-            "value": "revprox_consul"
-          },
-          {
-            "selected": false,
-            "text": "revprox_proxy",
-            "value": "revprox_proxy"
-          },
-          {
-            "selected": false,
-            "text": "revprox_registrator",
-            "value": "revprox_registrator"
-          },
-          {
-            "selected": false,
-            "text": "selfheal_selfheal",
-            "value": "selfheal_selfheal"
           }
         ],
         "query": "label_values(container_label_com_docker_swarm_service_name)",
-        "refresh": 0,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "label_values(container_start_time_seconds{container_label_com_docker_stack_namespace=\"$tag\"},container_label_com_docker_swarm_service_name)",
-        "tags": [
-          "metrics",
-          "portainer",
-          "revprox",
-          "selfheal"
-        ],
+        "tags": [],
         "tagsQuery": "label_values(container_label_com_docker_stack_namespace)",
         "type": "query",
         "useTags": true
@@ -806,7 +759,7 @@
     ]
   },
   "timezone": "",
-  "title": "Health",
+  "title": "Container Health",
   "uid": "FICHXAUiz",
-  "version": 6
+  "version": 1
 }

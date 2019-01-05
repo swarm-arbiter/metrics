@@ -65,6 +65,7 @@ services:
       - internal
     volumes:
       - {{= stack.data_dir}}/persistent/grafana:/var/lib/grafana:rw
+      - {{= stack.data_dir}}/resources/grafana-provisioning:/etc/grafana/provisioning:ro
     deploy:
       mode: replicated
       replicas: 1

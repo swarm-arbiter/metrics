@@ -3,7 +3,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": "prometheus",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -15,19 +15,19 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
   "links": [],
   "panels": [
     {
       "aliasColors": {
+        "2xx": "#508642",
         "3xx": "#64b0c8",
-        "4xx": "#c15c17",
-        "HTTPS 2xx": "#508642",
-        "HTTPS 4xx": "#bf1b00"
+        "4xx": "#fc2828",
+        "5xx": "#ce28fc"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "prometheus",
       "decimals": null,
       "description": "Total inbound requests to traefik reverse proxy instances",
       "fill": 10,
@@ -51,7 +51,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 0,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -61,12 +61,13 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": true,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(rate(traefik_entrypoint_requests_total{code=~\"2.*\"}[30s]))",
+          "expr": "sum(rate(traefik_entrypoint_requests_total{code=~\"2.*\"}[15s]))",
           "format": "time_series",
           "hide": false,
+          "interval": "15s",
           "intervalFactor": 1,
           "legendFormat": "2xx",
           "refId": "B"
@@ -79,22 +80,25 @@
           "refId": "C"
         },
         {
-          "expr": "sum(rate(traefik_entrypoint_requests_total{code=~\"4.*\"}[30s]))",
+          "expr": "sum(rate(traefik_entrypoint_requests_total{code=~\"4.*\"}[15s]))",
           "format": "time_series",
+          "interval": "15s",
           "intervalFactor": 1,
           "legendFormat": "4xx",
           "refId": "D"
         },
         {
-          "expr": "sum(rate(traefik_entrypoint_requests_total{entrypoint=\"https\",code=~\"5.*\"}[30s]))",
+          "expr": "sum(rate(traefik_entrypoint_requests_total{entrypoint=\"https\",code=~\"5.*\"}[15s]))",
           "format": "time_series",
+          "interval": "15s",
           "intervalFactor": 1,
           "legendFormat": "5xx",
           "refId": "E"
         },
         {
-          "expr": "sum(rate(traefik_entrypoint_requests_total{entrypoint=\"https\",code=~\"[^2345].*\"}[30s]))",
+          "expr": "sum(rate(traefik_entrypoint_requests_total{entrypoint=\"https\",code=~\"[^2345].*\"}[15s]))",
           "format": "time_series",
+          "interval": "15s",
           "intervalFactor": 1,
           "legendFormat": "???",
           "refId": "A"
@@ -124,7 +128,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -146,6 +150,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "prometheus",
       "decimals": null,
       "fill": 10,
       "gridPos": {
@@ -168,7 +173,7 @@
         "values": true
       },
       "lines": true,
-      "linewidth": 1,
+      "linewidth": 0,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -178,12 +183,12 @@
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": true,
-      "steppedLine": false,
+      "steppedLine": true,
       "targets": [
         {
-          "expr": "sum(label_replace(label_replace(rate(traefik_backend_requests_total[30s]), \"backend\", \"$1\", \"backend\", \"backend-(.*)\"),\"backend\", \"$1\", \"backend\", \"(.*)-codewik-com\")) by (backend)",
+          "expr": "sum(label_replace(label_replace(rate(traefik_backend_requests_total[15s]), \"backend\", \"$1\", \"backend\", \"backend-(.*)\"),\"backend\", \"$1\", \"backend\", \"(.*)-codewik-com\")) by (backend)",
           "format": "time_series",
-          "interval": "",
+          "interval": "15s",
           "intervalFactor": 1,
           "legendFormat": "{{ backend }}",
           "refId": "A"
@@ -270,5 +275,5 @@
   "timezone": "",
   "title": "Traefik Traffic",
   "uid": "nQLm_J8ik",
-  "version": 2
+  "version": 1
 }
