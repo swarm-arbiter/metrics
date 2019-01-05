@@ -59,7 +59,7 @@ services:
 
   # Display pretty dashboards of prometheus data
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:5.4.2
     networks:
       - revprox_ingress
       - internal

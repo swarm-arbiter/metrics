@@ -1,40 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.4.2"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -51,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1546663216869,
+  "id": 4,
+  "iteration": 1546693561918,
   "links": [],
   "panels": [
     {
@@ -224,7 +188,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": "Prometheus",
       "fill": 9,
       "gridPos": {
         "h": 8,
@@ -644,6 +608,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
+      "decimals": null,
       "format": "percentunit",
       "gauge": {
         "maxValue": 100,
@@ -695,7 +660,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(rate(process_cpu_seconds_total[10s]))/sum((rate(node_cpu_seconds_total[10s])))",
+          "expr": "(((count(count(node_cpu_seconds_total{job=\"node-exporter\"}) by (cpu))) - avg(sum by (mode)(irate(node_cpu_seconds_total{job=\"node-exporter\"}[10s]))))) / sum(rate(node_cpu_seconds_total[10s]))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -724,17 +689,77 @@
     "list": [
       {
         "allValue": "",
-        "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "Prometheus",
         "definition": "label_values(container_label_com_docker_swarm_service_name)",
         "hide": 0,
         "includeAll": true,
         "label": "Tasks",
         "multi": true,
         "name": "task",
-        "options": [],
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "metrics_cadvisor",
+            "value": "metrics_cadvisor"
+          },
+          {
+            "selected": false,
+            "text": "metrics_grafana",
+            "value": "metrics_grafana"
+          },
+          {
+            "selected": false,
+            "text": "metrics_node_stat",
+            "value": "metrics_node_stat"
+          },
+          {
+            "selected": false,
+            "text": "metrics_prometheus",
+            "value": "metrics_prometheus"
+          },
+          {
+            "selected": false,
+            "text": "portainer_agent",
+            "value": "portainer_agent"
+          },
+          {
+            "selected": false,
+            "text": "portainer_frontend",
+            "value": "portainer_frontend"
+          },
+          {
+            "selected": false,
+            "text": "revprox_consul",
+            "value": "revprox_consul"
+          },
+          {
+            "selected": false,
+            "text": "revprox_proxy",
+            "value": "revprox_proxy"
+          },
+          {
+            "selected": false,
+            "text": "revprox_registrator",
+            "value": "revprox_registrator"
+          },
+          {
+            "selected": false,
+            "text": "selfheal_selfheal",
+            "value": "selfheal_selfheal"
+          }
+        ],
         "query": "label_values(container_label_com_docker_swarm_service_name)",
-        "refresh": 1,
+        "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -783,5 +808,5 @@
   "timezone": "",
   "title": "Health",
   "uid": "FICHXAUiz",
-  "version": 4
+  "version": 6
 }
