@@ -1,6 +1,6 @@
 # my global config
 global:
-  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  scrape_interval:      5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
@@ -14,21 +14,31 @@ rule_files:
   # - "first.rules"
   # - "second.rules"
 
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
+# Endpoints to poll for metrics
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'nodestat'
-    dns_sd_configs:
-      - port: 9100
-        type: A
-        names: [ 'node_stat' ]
-
-  - job_name: 'traefik'
-    dns_sd_configs:
-      - port: 9100
-        type: A
-        names: [ 'proxy' ]
+  - job_name: "consul"
+    consul_sd_configs:
+      - server: 'consul:8500'
+        services: []
+    relabel_configs:
+      # Use the consul service name as the prometheus job name
+      - source_labels: [__meta_consul_service]
+        target_label: job
+      # Get host node
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,host-([^,]+),.*'
+        replacement: '${1}'
+        target_label: host
+      # Get host instance name
+      - source_labels: [__meta_consul_tags]
+        regex: '.*,instance-([^,]+),.*'
+        replacement: '${1}'
+        target_label: instance
+      # Keep only services on port 9100
+      - source_labels: [__meta_consul_service_port]
+        regex: 9100
+        action: keep
