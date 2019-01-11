@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
   "links": [],
   "panels": [
     {
@@ -28,7 +27,7 @@
       "datasource": "prometheus",
       "fill": 0,
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 24,
         "x": 0,
         "y": 0
@@ -123,8 +122,9 @@
     {
       "aliasColors": {
         "Container Count": "#ba43a9",
+        "Estimated Required CPU": "rgb(255, 255, 255)",
         "Node Count": "#0a50a1",
-        "Total CPU Limit": "#890f02",
+        "Total CPU Limit": "rgb(255, 25, 0)",
         "Total CPU Utalization": "#c15c17"
       },
       "bars": false,
@@ -133,10 +133,10 @@
       "datasource": "prometheus",
       "fill": 0,
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 6
       },
       "id": 2,
       "legend": {
@@ -145,12 +145,12 @@
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
       "lines": true,
-      "linewidth": 3,
+      "linewidth": 5,
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
@@ -160,7 +160,16 @@
       "seriesOverrides": [
         {
           "alias": "Total CPU Utalization",
-          "fill": 5
+          "bars": true,
+          "lines": false
+        },
+        {
+          "alias": "Estimated Required CPU",
+          "linewidth": 3
+        },
+        {
+          "alias": "Total CPU Limit",
+          "zindex": 3
         }
       ],
       "spaceLength": 10,
@@ -180,6 +189,13 @@
           "intervalFactor": 1,
           "legendFormat": "Total CPU Utalization",
           "refId": "B"
+        },
+        {
+          "expr": "sum(node_load1)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Estimated Required CPU",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -236,7 +252,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 12
       },
       "id": 6,
       "legend": {
@@ -311,6 +327,7 @@
       }
     }
   ],
+  "refresh": "5s",
   "schemaVersion": 16,
   "style": "dark",
   "tags": [],
@@ -318,7 +335,7 @@
     "list": []
   },
   "time": {
-    "from": "now-2h",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
