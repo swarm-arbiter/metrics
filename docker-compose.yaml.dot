@@ -55,6 +55,7 @@ services:
         - "traefik.port=9090"
         - "traefik.backend={{= config.prometheus_domain }}"
         - "traefik.frontend.rule=Host:{{= config.prometheus_domain }}"
+        - "traefik.frontend.auth.basic.usersFile=/etc/traefik/frontend-passwd"
 
 
   # Display pretty dashboards of prometheus data
